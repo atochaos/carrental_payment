@@ -25,27 +25,15 @@ public class Payment {
 
     @PostUpdate
     public void onPostUpdate(){
+        Paid paid = new Paid();
+        BeanUtils.copyProperties(this, paid);
+        paid.publishAfterCommit();
 
-        if ("PAID".equals(this.getProcStatus())) {
-            Paid paid = new Paid();
-            BeanUtils.copyProperties(this, paid);
-            paid.publishAfterCommit();
-        } else {
-            PaymentCanceled paymentCanceled = new PaymentCanceled();
-            BeanUtils.copyProperties(this, paymentCanceled);
-            paymentCanceled.publishAfterCommit();
-        }
 
-        /*
-        System.out.println("#################### Enter Payment : ");
-        try {
-            Thread.currentThread().sleep((long) (400 + Math.random() * 220));
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SLEEP");
+        PaymentCanceled paymentCanceled = new PaymentCanceled();
+        BeanUtils.copyProperties(this, paymentCanceled);
+        paymentCanceled.publishAfterCommit();
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        */
 
     }
 
